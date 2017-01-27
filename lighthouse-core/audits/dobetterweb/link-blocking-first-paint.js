@@ -58,9 +58,8 @@ class LinkBlockingFirstPaintAudit extends Audit {
 
     const filtered = artifact.filter(item => item.tag.tagName === tagFilter);
 
-    let startTime = Number.MAX_VALUE;
+    const startTime = filtered.reduce((t, item) => Math.min(t, item.startTime), Number.MAX_VALUE);
     let endTime = 0;
-    startTime = filtered.reduce((t, item) => Math.min(t, item.startTime), startTime);
 
     const results = filtered.map(item => {
       endTime = Math.max(item.endTime, endTime);
