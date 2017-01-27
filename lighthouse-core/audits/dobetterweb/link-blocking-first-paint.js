@@ -22,6 +22,7 @@
 'use strict';
 
 const Audit = require('../audit');
+const URL = require('../../lib/url-shim');
 const Formatter = require('../../formatters/formatter');
 
 class LinkBlockingFirstPaintAudit extends Audit {
@@ -65,7 +66,7 @@ class LinkBlockingFirstPaintAudit extends Audit {
       endTime = Math.max(item.endTime, endTime);
 
       return {
-        url: item.tag.url,
+        url: URL.getDisplayName(item.tag.url),
         totalKb: `${Math.round(item.transferSize / 1024)} KB`,
         totalMs: `${Math.round((item.endTime - startTime) * 1000)}ms`
       };

@@ -134,7 +134,7 @@ describe('First paint blocking tags', () => {
     return tagsBlockingFirstPaint.afterPass({
       driver: {
         evaluateAsync() {
-          return Promise.resolve([linkDetails, scriptDetails]);
+          return Promise.resolve([linkDetails, linkDetails, scriptDetails]);
         }
       }
     }, traceData).then(artifact => {

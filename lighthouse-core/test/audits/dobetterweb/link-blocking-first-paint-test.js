@@ -67,7 +67,7 @@ describe('Link Block First Paint audit', () => {
     assert.equal(auditResult.rawValue, false);
     assert.ok(auditResult.displayValue.match('2 resources delayed first paint by 500ms'));
     assert.equal(auditResult.extendedInfo.value.results.length, 2);
-    assert.ok(auditResult.extendedInfo.value.results[0].url.match(linkDetails.href));
+    assert.equal(auditResult.extendedInfo.value.results[0].url, 'css/style.css');
     assert.equal(auditResult.extendedInfo.value.results[0].totalMs, '500ms');
     assert.equal(auditResult.extendedInfo.value.results[1].totalMs, '200ms');
   });

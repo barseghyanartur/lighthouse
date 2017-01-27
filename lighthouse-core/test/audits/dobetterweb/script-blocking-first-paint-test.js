@@ -64,7 +64,7 @@ describe('Script Block First Paint audit', () => {
     assert.equal(auditResult.rawValue, false);
     assert.ok(auditResult.displayValue.match('2 resources delayed first paint by 150ms'));
     assert.equal(auditResult.extendedInfo.value.results.length, 2);
-    assert.ok(auditResult.extendedInfo.value.results[0].url.match(scriptDetails.src));
+    assert.equal(auditResult.extendedInfo.value.results[0].url, 'js/app.js');
     assert.equal(auditResult.extendedInfo.value.results[0].totalMs, '150ms');
     assert.equal(auditResult.extendedInfo.value.results[1].totalMs, '50ms');
   });
