@@ -138,24 +138,20 @@ describe('First paint blocking tags', () => {
         }
       }
     }, traceData).then(artifact => {
-      const expected = {
-        items: [
-          {
-            tag: linkDetails,
-            transferSize: 10,
-            spendTime: 0
-          },
-          {
-            tag: scriptDetails,
-            transferSize: 12,
-            spendTime: 10000
-          }
-        ],
-        total: {
-          transferSize: 22,
-          spendTime: 10000
+      const expected = [
+        {
+          tag: linkDetails,
+          transferSize: 10,
+          startTime: 10,
+          endTime: 10
+        },
+        {
+          tag: scriptDetails,
+          transferSize: 12,
+          startTime: 12,
+          endTime: 22
         }
-      };
+      ];
       assert.deepEqual(artifact, expected);
     });
   });

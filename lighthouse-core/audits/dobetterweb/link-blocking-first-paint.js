@@ -55,31 +55,43 @@ class LinkBlockingFirstPaintAudit extends Audit {
       };
     }
 
-    let totalSpendTime = 0;
-    const results = artifact.items
-      .filter(item => item.tag.tagName === tagFilter)
-      .map(item => {
-        totalSpendTime += item.spendTime;
+    const filtered = artifact.filter(item => item.tag.tagName === tagFilter);
 
-        return {
-          url: item.tag.url,
-          label: `delayed first paint by ${item.spendTime}ms`
-        };
-      });
+    let startTime = Number.MAX_VALUE;
+    let endTime = 0;
+    startTime = filtered.reduce((t, item) => Math.min(t, item.startTime), startTime);
 
+    const results = filtered.map(item => {
+      endTime = Math.max(item.endTime, endTime);
+
+      return {
+        url: item.tag.url,
+        totalKb: `${Math.round(item.transferSize / 1024)} KB`,
+        totalMs: `${Math.round((item.endTime - startTime) * 1000)}ms`
+      };
+    });
+
+    const delayTime = Math.round((endTime - startTime) * 1000);
     let displayValue = '';
     if (results.length > 1) {
-      displayValue = `${results.length} resources delayed first paint by ${totalSpendTime}ms`;
+      displayValue = `${results.length} resources delayed first paint by ${delayTime}ms`;
     } else if (results.length === 1) {
-      displayValue = `${results.length} resource delayed first paint by ${totalSpendTime}ms`;
+      displayValue = `${results.length} resource delayed first paint by ${delayTime}ms`;
     }
 
     return {
       displayValue,
       rawValue: results.length === 0,
       extendedInfo: {
-        formatter: Formatter.SUPPORTED_FORMATS.URLLIST,
-        value: results
+        formatter: Formatter.SUPPORTED_FORMATS.TABLE,
+        value: {
+          results,
+          tableHeadings: {
+            url: 'URL',
+            totalKb: 'Size (KB)',
+            totalMs: 'Delayed Paint By (ms)'
+          }
+        }
       }
     };
   }
